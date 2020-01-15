@@ -2,6 +2,7 @@
 
 Pagination with gorm and net/http
 
+[![Actions Status](https://github.com/maruware/gorm-pagination/workflows/Test/badge.svg)](https://github.com/maruware/gorm-pagination/actions)
 
 ## Usage
 
