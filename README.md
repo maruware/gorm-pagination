@@ -8,8 +8,11 @@ Pagination with gorm and net/http
 Example (Error handling is omitted)
 
 ```go
+package main
 
 import (
+    "net/http"
+    "github.com/jinzhu/gorm"
 	pagination "github.com/maruware/gorm-pagination"
 )
 
@@ -33,10 +36,14 @@ func (s *Sample) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     w.Write(b)
 }
 
-s := &Sample{db}
-h := pagination.Middleware(s)
+func main() {
+    s := &Sample{db}
+    h := pagination.Middleware(s)
 
-http.ListenAndServe(":3000", h)
+    http.ListenAndServe(":3000", h)
+}
+
+
 ```
 
 And request with below queries
