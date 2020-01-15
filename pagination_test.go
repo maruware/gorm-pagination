@@ -105,7 +105,7 @@ func TestIntegrate(t *testing.T) {
 	q := u.Query()
 
 	// Pagination params
-	sort, _ := json.Marshal(pagination.SortParam{Field: "title", Order: "desc"})
+	sort, _ := json.Marshal(pagination.SortParam{"title", "desc"})
 	q.Set("sort", string(sort))
 
 	range_, _ := json.Marshal(pagination.RangeParam{10, 20})

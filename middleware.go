@@ -8,10 +8,7 @@ import (
 	"strings"
 )
 
-type SortParam struct {
-	Field string `json:"field"`
-	Order string `json:"order"`
-}
+type SortParam []string
 
 type RangeParam []int
 type FilterParam []Filter
@@ -47,7 +44,11 @@ func Middleware(next http.Handler) http.Handler {
 				http.Error(w, "BadRequest", http.StatusBadRequest)
 				return
 			}
-			sortStr := fmt.Sprintf("%v %v", sort.Field, sort.Order)
+			if len(sort) != 2 {
+				http.Error(w, "Bad sort format", http.StatusBadRequest)
+				return
+			}
+			sortStr := fmt.Sprintf("%v %v", sort[0], sort[1])
 			ctx = context.WithValue(ctx, SortCtxKey, sortStr)
 		}
 
