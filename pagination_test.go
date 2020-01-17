@@ -92,17 +92,14 @@ func TestIntegrate(t *testing.T) {
 		t.Fatalf("failed to create db: %v", err)
 	}
 
+	handler := buildHttp(db)
+
 	num := 300
 	if err := createInitialData(db, num); err != nil {
 		t.Fatalf("failed to create: %v", err)
 	}
 
-	h := buildHttp(db)
-	server := httptest.NewServer(h)
-	defer server.Close()
-
-	u, _ := url.Parse(server.URL)
-	q := u.Query()
+	q := url.Values{}
 
 	// Pagination params
 	sort, _ := json.Marshal(pagination.SortParam{"title", "desc"})
@@ -117,18 +114,25 @@ func TestIntegrate(t *testing.T) {
 		Values: []interface{}{"1"},
 	}})
 	q.Set("filter", string(filters))
+
+	u, _ := url.Parse("/")
 	u.RawQuery = q.Encode()
 
-	res, err := http.Get(u.String())
+	// request
+	w := httptest.NewRecorder()
+	r := httptest.NewRequest("GET", u.String(), nil)
+
+	handler.ServeHTTP(w, r)
+
 	if err != nil {
 		t.Fatalf("failed to get posts; %v", err)
 	}
-	if res.StatusCode != http.StatusOK {
-		t.Fatalf("failed to get posts; status = %d", res.StatusCode)
+	if c := w.Result().StatusCode; c != http.StatusOK {
+		t.Fatalf("failed to get posts; status = %d", c)
 	}
 
 	var data getPostsRes
-	dec := json.NewDecoder(res.Body)
+	dec := json.NewDecoder(w.Result().Body)
 	if err := dec.Decode(&data); err != nil {
 		t.Fatal("bad response")
 	}
