@@ -41,7 +41,7 @@ func Middleware(next http.Handler) http.Handler {
 			d := json.NewDecoder(strings.NewReader(s))
 			err := d.Decode(&sort)
 			if err != nil {
-				http.Error(w, "BadRequest", http.StatusBadRequest)
+				http.Error(w, "Bad sort format", http.StatusBadRequest)
 				return
 			}
 			if len(sort) != 2 {
@@ -60,7 +60,7 @@ func Middleware(next http.Handler) http.Handler {
 			d := json.NewDecoder(strings.NewReader(rn))
 			err := d.Decode(&rnge)
 			if err != nil {
-				http.Error(w, "BadRequest", http.StatusBadRequest)
+				http.Error(w, "Bad range format", http.StatusBadRequest)
 				return
 			}
 
@@ -77,7 +77,7 @@ func Middleware(next http.Handler) http.Handler {
 			d := json.NewDecoder(strings.NewReader(f))
 			err := d.Decode(&filter)
 			if err != nil {
-				http.Error(w, "BadRequest", http.StatusBadRequest)
+				http.Error(w, "Bad filter format", http.StatusBadRequest)
 				return
 			}
 			ctx = context.WithValue(ctx, FilterCtxKey, filter)
