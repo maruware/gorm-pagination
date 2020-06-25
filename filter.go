@@ -7,6 +7,8 @@ const (
 	FilterOpContains = "contains"
 	FilterOpBetween  = "between"
 	FilterOpIn       = "in"
+	FilterOpNull     = "null"
+	FilterOpNotNull  = "not_null"
 )
 
 type Filter struct {

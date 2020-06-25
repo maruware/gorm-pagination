@@ -35,6 +35,10 @@ func Paginate(db *gorm.DB, sort string, offset int, limit int, filters []Filter,
 			}
 		} else if filter.Op == FilterOpIn {
 			q = q.Where(fmt.Sprintf("%s IN (?)", filter.Column), filter.Values)
+		} else if filter.Op == FilterOpNull {
+			q = q.Where(fmt.Sprintf("%s IS NULL", filter.Column))
+		} else if filter.Op == FilterOpNotNull {
+			q = q.Where(fmt.Sprintf("%s IS NOT NULL", filter.Column))
 		} else {
 			return nil, fmt.Errorf("Bad filter Op. %v", filter.Op)
 		}
